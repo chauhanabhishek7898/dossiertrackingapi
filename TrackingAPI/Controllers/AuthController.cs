@@ -10,7 +10,7 @@ namespace TrackingAPI.Controllers
 {
     [Route("api/[controller]")]
      [ApiController]
-     [Authorize]
+     [Authorize]  // For authorization
     public class AuthController : ControllerBase
     {
     }
