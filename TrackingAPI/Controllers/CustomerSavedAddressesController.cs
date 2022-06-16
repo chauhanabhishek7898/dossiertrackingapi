@@ -39,6 +39,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vAddress", CM.vAddress);
                         myCommand.Parameters.AddWithValue("vLat", CM.vLat);
                         myCommand.Parameters.AddWithValue("vLong", CM.vLong);
+                        myCommand.Parameters.AddWithValue("btByDefault", CM.btByDefault);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
@@ -66,6 +67,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vLat", CM.vLat);
                         myCommand.Parameters.AddWithValue("vLong", CM.vLong);
                         myCommand.Parameters.AddWithValue("btActive", CM.btActive);
+                        myCommand.Parameters.AddWithValue("btByDefault", CM.btByDefault);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
