@@ -11,9 +11,11 @@
         public string vFromLocation { get; set; }
         public string vFromLocationLat { get; set; }
         public string vFromLocationLong { get; set; }
+        public string vFromFlatNoPlotNoLaneBuilding { get; set; }
         public string vToLocation { get; set; }
         public string vToLocationLat { get; set; }
         public string vToLocationLong { get; set; }
+        public string vToFlatNoPlotNoLaneBuilding { get; set; }
         public bool btActive { get; set; }
         public bool btPaid { get; set; }
         public double nKMs { get; set; }

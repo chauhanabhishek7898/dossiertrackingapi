@@ -41,9 +41,11 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vFromLocation", CM.vFromLocation);
                         myCommand.Parameters.AddWithValue("vFromLocationLat", CM.vFromLocationLat);
                         myCommand.Parameters.AddWithValue("vFromLocationLong", CM.vFromLocationLong);
+                        myCommand.Parameters.AddWithValue("vFromFlatNoPlotNoLaneBuilding", CM.vFromFlatNoPlotNoLaneBuilding);
                         myCommand.Parameters.AddWithValue("vToLocation", CM.vToLocation);
                         myCommand.Parameters.AddWithValue("vToLocationLat", CM.vToLocationLat);
                         myCommand.Parameters.AddWithValue("vToLocationLong", CM.vToLocationLong);
+                        myCommand.Parameters.AddWithValue("vToFlatNoPlotNoLaneBuilding", CM.vToFlatNoPlotNoLaneBuilding);
                         myCommand.Parameters.AddWithValue("nKMs", CM.nKMs);
                         myCommand.Parameters.AddWithValue("nRate", CM.nRate);
                         myCommand.Parameters.AddWithValue("nTotalRate", CM.nTotalRate);

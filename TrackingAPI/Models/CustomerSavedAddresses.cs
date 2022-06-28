@@ -8,6 +8,7 @@
         public string vAddress { get; set; }
         public string vLat { get; set; }
         public string vLong { get; set; }
+        public string vFlatNoPlotNoLaneBuilding { get; set; }
         public bool btActive { get; set; }
         public bool btByDefault { get; set; }
 

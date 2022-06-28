@@ -39,6 +39,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vAddress", CM.vAddress);
                         myCommand.Parameters.AddWithValue("vLat", CM.vLat);
                         myCommand.Parameters.AddWithValue("vLong", CM.vLong);
+                        myCommand.Parameters.AddWithValue("vFlatNoPlotNoLaneBuilding", CM.vFlatNoPlotNoLaneBuilding);
                         myCommand.Parameters.AddWithValue("btByDefault", CM.btByDefault);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
