@@ -12,6 +12,6 @@ namespace TrackingAPI.Models
         public static string GetOTPMsgMail(string otp)
         { return $"Your One Time Pin (OTP) to login to Drome APP is <strong>{otp}</strong>. It is valid for 1 minute."; }
         public static string GetOTPMsgSMS(string otp)
-        { return $"Your One Time Pin (OTP) to login to Drome APP is {otp}. It is valid for 1 minute."; }
+        { return $"Your One Time Pin (OTP) to login to DCPL APP is {otp}. It is valid for 1 minute."; }
     }
 }

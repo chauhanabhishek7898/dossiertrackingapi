@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TrackingAPI.Utilities;
 
 namespace TrackingAPI.Controllers
 {
@@ -35,5 +36,10 @@ namespace TrackingAPI.Controllers
             })
             .ToArray();
         }
+        //[HttpGet]
+        //public void sms()
+        //{
+        //    SmsSender.SendSms("12345", "9990810985");
+        //}
     }
 }
