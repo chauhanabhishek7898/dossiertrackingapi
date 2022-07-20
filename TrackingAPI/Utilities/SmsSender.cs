@@ -43,7 +43,7 @@ namespace TrackingAPI.Utilities
             request.AddParameter("sendMethod", "quick");
             request.AddParameter("mobile", mobileNumber);
             request.AddParameter("msg", smsText);
-            request.AddParameter("msgType", "text");
+            //request.AddParameter("msgType", "text");
             request.AddParameter("msgType", "text");
             var response = client.Execute(request);
 
