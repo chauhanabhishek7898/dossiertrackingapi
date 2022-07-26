@@ -56,7 +56,7 @@ namespace TrackingAPI.Controllers
         {
             try
             {
-                string query = "DM_sp_VehicleRateMaster_Insert";
+                string query = "DM_sp_WaitTimeCharges_Insert";
                 DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
