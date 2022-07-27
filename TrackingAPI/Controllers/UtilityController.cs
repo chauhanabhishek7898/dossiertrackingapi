@@ -163,5 +163,134 @@ namespace TrackingAPI.Controllers
             if (e != "null") { MailSender.SendEmailWithOtp(MessageTemplate.SubGetOTPMsgCP, MessageTemplate.GetOTPMsgCPMail(otp), e); }
             return new JsonResult(otp);
         }
+
+        [HttpGet]
+        [Route("SendOtpToMobileOrEmailByUNorMobileNo/{vUserNameORMobileNo}/{isOTPOnMobile}/{isOTPOnEmail}")]
+        public JsonResult SendOtpToMobileOrEmailByUNorMobileNo(string vUserNameORMobileNo, bool isOTPOnMobile, bool isOTPOnEmail)
+        {
+            string query = "DM_sp_GetMobileNoAndEmailIdByUNorMobileNo";
+            string otp;
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vUserNameORMobileNo", vUserNameORMobileNo);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            if (table.Rows.Count > 0)
+            {
+                if (isOTPOnEmail)
+                {
+                    if (table.Rows[0]["vEmailId"].ToString().Trim() == "" || table.Rows[0]["vEmailId"].ToString() == DBNull.Value.ToString())
+                    {
+                        return new JsonResult(new
+                        {
+                            statusCode = 0,
+                            statusMsg = "Email Id not found. Please add your Email Id to  receive communications from DCPL APP. Inconvenience caused is deeply regretted."
+                        });
+                    }
+                }
+                if (isOTPOnMobile)
+                {
+                    if (table.Rows[0]["vMobileNo"].ToString().Trim() == "" || table.Rows[0]["vMobileNo"].ToString() == DBNull.Value.ToString())
+                    {
+                        return new JsonResult(new
+                        {
+                            statusCode = 0,
+                            statusMsg = "Mobile Number not found. Please add your Mobile Number to receive communications from DCPL APP. Inconvenience caused is deeply regretted."
+                        });
+                    }
+                }
+                string emailId = table.Rows[0]["vEmailId"].ToString();
+                string mobileNumber = table.Rows[0]["vMobileNo"].ToString();
+                otp = RandomCodeGenerator.GetRandomCode(4, RandomCodeGenerator.CodeType.Otp);
+                if (isOTPOnMobile) { SmsSender.SendSms(otp, mobileNumber); }
+                if (isOTPOnEmail) { MailSender.SendEmailWithOtp(MessageTemplate.SubGetOTPMsg, MessageTemplate.GetOTPMsgMail(otp), emailId); }
+                var result = new
+                {
+                    statusCode = 1,
+                    userData = table,
+                    otp = otp
+                };
+                return new JsonResult(result);
+            }
+            else
+            {
+                //"Not_Found"
+                return new JsonResult(new
+                {
+                    statusCode = 0,
+                    statusMsg = "User Id OR Mobile No. not Found."
+                }); ;
+            }
+        }
+
+        [HttpGet]
+        [Route("SendOtpToMobileOrEmailByUNorMobileNoFP/{vUserNameORMobileNo}/{isOTPOnMobile}/{isOTPOnEmail}")]
+        public JsonResult SendOtpToMobileOrEmailByUNorMobileNoFP(string vUserNameORMobileNo, bool isOTPOnMobile, bool isOTPOnEmail)
+        {
+            string query = "DM_sp_GetMobileNoAndEmailIdByUNorMobileNo";
+            string otp;
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vUserNameORMobileNo", vUserNameORMobileNo);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            if (table.Rows.Count > 0)
+            {
+                if (isOTPOnEmail)
+                {
+                    if (table.Rows[0]["vEmailId"].ToString().Trim() == "" || table.Rows[0]["vEmailId"].ToString() == DBNull.Value.ToString())
+                    {
+                        return new JsonResult(new
+                        {
+                            statusCode = 0,
+                            statusMsg = "Email Id not found. Please add your Email Id to  receive communications from DCPL APP. Inconvenience caused is deeply regretted."
+                        });
+                    }
+                }
+                if (isOTPOnMobile)
+                {
+                    if (table.Rows[0]["vMobileNo"].ToString().Trim() == "" || table.Rows[0]["vMobileNo"].ToString() == DBNull.Value.ToString())
+                    {
+                        return new JsonResult(new
+                        {
+                            statusCode = 0,
+                            statusMsg = "Mobile Number not found. Please add your Mobile Number to receive communications from DCPL APP. Inconvenience caused is deeply regretted."
+                        });
+                    }
+                }
+                string emailId = table.Rows[0]["vEmailId"].ToString();
+                string mobileNumber = table.Rows[0]["vMobileNo"].ToString();
+                otp = RandomCodeGenerator.GetRandomCode(4, RandomCodeGenerator.CodeType.Otp);
+                if (isOTPOnMobile) { SmsSender.SendSmsText(MessageTemplate.GetOTPMsgCPSMS(otp), mobileNumber); }
+                if (isOTPOnEmail) { MailSender.SendEmailWithOtp(MessageTemplate.SubGetOTPMsgCP, MessageTemplate.GetOTPMsgCPMail(otp), emailId); }
+                var result = new
+                {
+                    statusCode = 1,
+                    userData = table,
+                    otp = otp
+                };
+                return new JsonResult(result);
+            }
+            else
+            {
+                //"Not_Found"
+                return new JsonResult(new
+                {
+                    statusCode = 0,
+                    statusMsg = "User Id OR Mobile No. not Found."
+                }); ;
+            }
+        }
     }
 }
