@@ -72,7 +72,7 @@ namespace TrackingAPI.Controllers
         [Route("CheckExistsMobileNo/{vMobileNo}/{nRoleId}")]
         public JsonResult CheckExistsMobileNo(string vMobileNo, int nRoleId)
         {
-            string query = "DM_sp_CheckExistsMobileNo";
+            string query = "DM_sp_CheckExistsMobileNoOfUser";
             DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
