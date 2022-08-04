@@ -23,21 +23,49 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(CustomerMasterClass RUS)
+        //public JsonResult Post(CustomerMasterClass RUS)
+        //{
+        //    string query = "DM_sp_CustomerMaster_Insert";
+        //    DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+        //    var JsonInput = JsonConvert.SerializeObject(RUS);
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myCommand.CommandType = CommandType.StoredProcedure;
+        //            myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
+        //            myReader = myCommand.ExecuteReader(); myReader.Close(); myCon.Close();
+        //        }
+        //    }
+        //    return new JsonResult("Record Added Successfully !!");
+        //}
+        public async Task<JsonResult> Post(IFormFile AadharNoFile)
         {
-            string query = "DM_sp_CustomerMaster_Insert";
-            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
-            var JsonInput = JsonConvert.SerializeObject(RUS);
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            try
             {
-                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                string CustomerMasterJson = Request.Form["CustomerMaster"];
+                CustomerMasterClass RUS = JsonConvert.DeserializeObject<CustomerMasterClass>(CustomerMasterJson);
+                if (AadharNoFile != null)
                 {
-                    myCommand.CommandType = CommandType.StoredProcedure;
-                    myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
-                    myReader = myCommand.ExecuteReader(); myReader.Close(); myCon.Close();
+                    var vAadhaarNoFilePath = $"assets//CustomerMaster//PMC.CustomerMaster[0].vMobileNo//AadharNoFile//{AadharNoFile.FileName}";
+                    var response = await ImageUploader.SaveImageND(AadharNoFile, RUS.CustomerMaster[0].vMobileNo, vAadhaarNoFilePath);
+                    RUS.CustomerMaster[0].vAadhaarNoFilePath = vAadhaarNoFilePath;
                 }
+                string query = "DM_sp_CustomerMaster_Insert";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                var JsonInput = JsonConvert.SerializeObject(RUS);
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
+                        myReader = myCommand.ExecuteReader(); myReader.Close(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Record Added Successfully !!");
             }
-            return new JsonResult("Record Added Successfully !!");
+            catch (Exception ex) { throw ex; }
         }
 
         [HttpPut]

@@ -23,15 +23,16 @@ namespace TrackingAPI.Utilities
             //MailBody = $"Your One Time Pin (OTP) to login to Drome App is {verificationCode}. It is valid for 3 minutes."; //}
             try
             {
-                MailMessage msg = new MailMessage(); msg.From = new MailAddress("admin@drome.health");
+                MailMessage msg = new MailMessage(); msg.From = new MailAddress("admin@dossierexpress.com");
                 msg.To.Add(new MailAddress(emailId));
                 if (ccEmailId != null) { msg.CC.Add(new MailAddress(ccEmailId)); }
                 if (bccEmailId != null) { msg.Bcc.Add(new MailAddress(bccEmailId)); }
                 msg.Subject = subject;
                 msg.IsBodyHtml = true; msg.Body = GenerateEmailOtpText(msg.Subject, emailBody);
-                SmtpClient smt = new SmtpClient(); smt.Host = "smtpout.secureserver.net";
+                //msg.IsBodyHtml = true; msg.Body = "hi";
+                SmtpClient smt = new SmtpClient(); smt.Host = "secure.emailsrvr.com";
                 System.Net.NetworkCredential ntcd = new NetworkCredential(); smt.UseDefaultCredentials = true;
-                ntcd.UserName = "admin@drome.health"; ntcd.Password = "Admin@drome";
+                ntcd.UserName = "admin@dossierexpress.com"; ntcd.Password = "admin120@Doss2022";
                 smt.Credentials = ntcd; smt.EnableSsl = false; smt.Port = 587; smt.Send(msg);
             }
             catch (Exception ex) { throw ex; }

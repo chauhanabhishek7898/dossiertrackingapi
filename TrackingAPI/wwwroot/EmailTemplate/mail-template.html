@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        .mail-tamplate {
+            width: 80%;
+            margin: 0 auto;
+            font-family: 'Poppins', sans-serif;
+            transform: translate(0,50%);
+        }
+
+            .mail-tamplate .top-logo {
+                text-align: center;
+            }
+
+            .mail-tamplate .mail-template-deatial .mail-template-head {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+                .mail-tamplate .mail-template-deatial .mail-template-head h1 {
+                    text-align: center;
+                    margin: 0;
+                    color: #4663D0;
+                }
+            .mail-tamplate .mail-template-deatial .mail-tamplate-text {
+                border: 0.5px solid #ccc;
+                padding: 5px;
+                margin: 15px 0 60px;
+            }
+
+            .mail-tamplate .mail-template-deatial .mail-tamplate-text p {
+                font-size: 14px;
+                color: #7b7b7b;
+                font-weight: 400;
+                text-align: center;
+            }
+
+            .mail-tamplate .mail-template-deatial .otp-massege {
+                font-size: 16px;
+                font-weight: 700;
+                text-align: center;
+                margin: 15px 0;
+                display: block;
+            }
+
+            .mail-tamplate .mail-template-deatial .mail-confirm-btn {
+                text-align: center;
+                margin: 10px auto;
+                width: 100%;
+            }
+
+                .mail-tamplate .mail-template-deatial .mail-confirm-btn a {
+                    border: none;
+                    background: #7087db;
+                    color: #fff;
+                    height: 37px;
+                    padding: 0 15px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: all 0.5s ease-in-out;
+                    text-decoration: none;
+                    display: inline-block;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                    .mail-tamplate .mail-template-deatial .mail-confirm-btn a:hover {
+                        background: #31b0a4;
+                    }
+            .mail-tamplate .footer-img {
+                margin: 30px auto 0 auto;
+                width: 150px;
+            }
+
+                .mail-tamplate .footer-img img {
+                    width: 100%;
+                }
+    </style>
+</head>
+<body>
+    <div class="mail-tamplate">
+        <div class="top-logo">
+            <!--<img src=https://picsum.photos/200 alt="">-->
+        </div>
+        <div class="mail-template-deatial">
+            <div class="mail-template-head">
+                <h1>{{subject}}</h1>
+            </div>
+            <div class="mail-tamplate-text">
+                <p>{{body}}</p>
+            </div>
+
+            <div class="mail-footer">
+                <p>
+                    Do not reply to this email. For any questions or suggestions contact us via <a href="https://drome.co.in/contact-us/">Contact & Support</a> on our website.
+                </p>
+                <p>
+                    © Drome Services Pvt.Ltd., 2022. All rights reserved. Head Office - 251, Ground Floor, Orchid Island, Sector 51, Gurgaon-122018. Drome values and respects your privacy, please read our <a href="https://drome.co.in/privacy-policy-2/">Privacy Policy</a> for more information.
+                </p>
+            </div>
+            <div class="footer-img">
+                <!--<img src="https://dromewebapi.azurewebsites.net/assets//Organization//Logo//1//logo.png" />-->
+                <img src="http://dossierexpress.com/image/bottom%20text%20logo.png" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>
