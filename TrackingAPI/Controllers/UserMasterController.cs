@@ -69,8 +69,8 @@ namespace TrackingAPI.Controllers
 
         //CheckExistsMobileNo
         [HttpGet]
-        [Route("CheckExistsMobileNo/{vMobileNo}/{nRoleId}")]
-        public JsonResult CheckExistsMobileNo(string vMobileNo, int nRoleId)
+        [Route("CheckExistsMobileNo/{vMobileNo}")]
+        public JsonResult CheckExistsMobileNo(string vMobileNo)
         {
             string query = "DM_sp_CheckExistsMobileNoOfUser";
             DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
@@ -80,7 +80,6 @@ namespace TrackingAPI.Controllers
                 {
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("vMobileNo", vMobileNo);
-                    myCommand.Parameters.AddWithValue("nRoleId", nRoleId);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                 }
             }
