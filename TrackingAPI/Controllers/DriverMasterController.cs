@@ -78,12 +78,12 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
 
-                        ////Send Email and Sms
-                        //string MailSubject = MessageTemplate.SubER;
-                        //string EmailText = MessageTemplate.ERMail(table.Rows[0]["vContactPersonOwner"].ToString(), table.Rows[0]["vEType"].ToString(), table.Rows[0]["vEstablishmentName"].ToString(), table.Rows[0]["vEId"].ToString(), table.Rows[0]["RoleType"].ToString(), table.Rows[0]["MemberCode"].ToString());
-                        //string SMSText = MessageTemplate.ERSMS(table.Rows[0]["vContactPersonOwner"].ToString(), table.Rows[0]["vEType"].ToString(), table.Rows[0]["vEstablishmentName"].ToString(), table.Rows[0]["vEId"].ToString(), table.Rows[0]["RoleType"].ToString(), table.Rows[0]["MemberCode"].ToString());
-                        //MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["vEmailId"].ToString(), table.Rows[0]["DromeEmail"].ToString());
-                        //SmsSender.SendSmsText(SMSText, table.Rows[0]["MobileNo"].ToString());
+                        //Send Email and Sms
+                        string MailSubject = MessageTemplate.SubLoginCreation;
+                        string EmailText = MessageTemplate.LoginCreationMail(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["DriverName"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        string SMSText = MessageTemplate.LoginCreationSMS(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CustomerEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                        SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
                     }
                 }
                 return new JsonResult(table);

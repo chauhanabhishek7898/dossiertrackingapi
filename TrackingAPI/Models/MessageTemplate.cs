@@ -41,5 +41,12 @@ namespace TrackingAPI.Models
         public static string GetOTPMsgCMSMS(string otp)
         { return $"Your One Time Pin (OTP) to verify your Mobile Number w.r.t. DCPL APP is {otp}. It is valid for 1 minute."; }
 
+        //Customer creation Message
+        public static string SubLoginCreation => "Login Creation Successful.";
+        public static string LoginCreationMail(string AutoRegId, string UserName, string UserRole)
+        { return $"Dear <strong>{UserName}</strong>, <strong>{UserRole} Login</strong> has been Created Successfully with Registration Id: <strong>{AutoRegId}</strong>. Please use <strong>mobile APP</strong> to access the application."; }
+        public static string LoginCreationSMS(string AutoRegId, string UserRole)
+        { return $"{UserRole} Login Created Successfully with Registration Id: {AutoRegId}. Please use mobile APP to access the application."; }
+
     }
 }

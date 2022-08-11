@@ -34,39 +34,18 @@ namespace TrackingAPI.Controllers
                 {
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
-                    myReader = myCommand.ExecuteReader(); myReader.Close(); myCon.Close();
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+
+                    //Send Email and Sms
+                    string MailSubject = MessageTemplate.SubLoginCreation;
+                    string EmailText = MessageTemplate.LoginCreationMail(table.Rows[0]["AutoCId"].ToString(), table.Rows[0]["CustomerName"].ToString(), table.Rows[0]["UserRole"].ToString());
+                    string SMSText = MessageTemplate.LoginCreationSMS(table.Rows[0]["AutoCId"].ToString(), table.Rows[0]["UserRole"].ToString());
+                    MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CustomerEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                    SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
                 }
             }
             return new JsonResult("Record Added Successfully !!");
         }
-        //public async Task<JsonResult> Post(IFormFile AadharNoFile)
-        //{
-        //    try
-        //    {
-        //        string CustomerMasterJson = Request.Form["CustomerMaster"];
-        //        CustomerMasterClass RUS = JsonConvert.DeserializeObject<CustomerMasterClass>(CustomerMasterJson);
-        //        if (AadharNoFile != null)
-        //        {
-        //            var vAadhaarNoFilePath = $"assets//CustomerMaster//PMC.CustomerMaster[0].vMobileNo//AadharNoFile//{AadharNoFile.FileName}";
-        //            var response = await ImageUploader.SaveImageND(AadharNoFile, RUS.CustomerMaster[0].vMobileNo, vAadhaarNoFilePath);
-        //            RUS.CustomerMaster[0].vAadhaarNoFilePath = vAadhaarNoFilePath;
-        //        }
-        //        string query = "DM_sp_CustomerMaster_Insert";
-        //        DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
-        //        var JsonInput = JsonConvert.SerializeObject(RUS);
-        //        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-        //        {
-        //            myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
-        //            {
-        //                myCommand.CommandType = CommandType.StoredProcedure;
-        //                myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
-        //                myReader = myCommand.ExecuteReader(); myReader.Close(); myCon.Close();
-        //            }
-        //        }
-        //        return new JsonResult("Record Added Successfully !!");
-        //    }
-        //    catch (Exception ex) { throw ex; }
-        //}
 
         [HttpPut]
         public async Task<JsonResult> Put(IFormFile AadharNoFile)
