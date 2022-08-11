@@ -19,5 +19,6 @@
         public string vLat { get; set; }
         public string vLong { get; set; }
         public string vFlatNoPlotNoLaneBuilding { get; set; }
+        public string vCityName { get; set; }
     }
 }

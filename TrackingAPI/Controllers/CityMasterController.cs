@@ -115,5 +115,24 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpGet]
+        [Route("GetCityIdAgainstCityName/{vCityName}")]
+        public JsonResult CheckExistsLicenseNo(string vCityName)
+        {
+            string query = "DM_sp_GetCityIdAgainstCityName";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vCityName", vCityName);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            if (table.Rows.Count == 0) { return new JsonResult("We don't provide service to this City.."); }
+            return new JsonResult(table);
+        }
+
     }
 }
