@@ -82,6 +82,8 @@ namespace TrackingAPI.Controllers
                         myCommand.CommandType = CommandType.StoredProcedure;
                         myCommand.Parameters.AddWithValue("vCityName", CM.vCityName);
                         myCommand.Parameters.AddWithValue("nStateId", CM.nStateId);
+                        myCommand.Parameters.AddWithValue("btMainInterRelatedCity", CM.btMainInterRelatedCity);
+                        myCommand.Parameters.AddWithValue("nInterRelatedCityId", CM.nInterRelatedCityId);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
@@ -107,6 +109,8 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vCityName", CM.vCityName);
                         myCommand.Parameters.AddWithValue("nStateId", CM.nStateId);
                         myCommand.Parameters.AddWithValue("btActive", CM.btActive);
+                        myCommand.Parameters.AddWithValue("btMainInterRelatedCity", CM.btMainInterRelatedCity);
+                        myCommand.Parameters.AddWithValue("nInterRelatedCityId", CM.nInterRelatedCityId);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
