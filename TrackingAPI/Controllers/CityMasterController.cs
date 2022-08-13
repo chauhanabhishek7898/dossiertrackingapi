@@ -50,6 +50,22 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetMainInterrelatedCities")]
+        public JsonResult GetMainInterrelatedCities()
+        {
+            string query = "DM_sp_GetMainInterrelatedCities";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
         [Route("CityMaster_SelectAll_ActiveLikeSearch/{vGeneric}")]
         public JsonResult CityMaster_SelectAll_ActiveLikeSearch(string vGeneric)
         {
