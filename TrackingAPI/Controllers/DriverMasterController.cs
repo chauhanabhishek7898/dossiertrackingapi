@@ -79,9 +79,9 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
 
                         //Send Email and Sms
-                        string MailSubject = MessageTemplate.SubLoginCreation;
-                        string EmailText = MessageTemplate.LoginCreationMail(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["DriverName"].ToString(), table.Rows[0]["UserRole"].ToString());
-                        string SMSText = MessageTemplate.LoginCreationSMS(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        string MailSubject = MessageTemplate.SubLoginCreationDriver;
+                        string EmailText = MessageTemplate.LoginCreationDriverMail(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["DriverName"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        string SMSText = MessageTemplate.LoginCreationDriverSMS(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["UserRole"].ToString());
                         MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CustomerEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
                         SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
                     }
@@ -293,6 +293,35 @@ namespace TrackingAPI.Controllers
                 }
             }
             return new JsonResult(table);
+        }
+
+        [HttpPut]
+        [Route("ApproveDrivers")]
+        public JsonResult ApproveDrivers(DriverMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_ApproveDrivers";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nUserId", CM.nUserId);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+
+                        //Send Email and Sms
+                        string MailSubject = MessageTemplate.SubDriverApproved;
+                        string EmailText = MessageTemplate.DriverApprovedMail(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["DriverName"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        string SMSText = MessageTemplate.DriverApprovedSMS(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["UserRole"].ToString());
+                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CustomerEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                        SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
+                    }
+                }
+                return new JsonResult("Driver Approved Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 
