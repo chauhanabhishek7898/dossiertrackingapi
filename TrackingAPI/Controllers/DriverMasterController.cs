@@ -315,7 +315,7 @@ namespace TrackingAPI.Controllers
                         string MailSubject = MessageTemplate.SubDriverApproved;
                         string EmailText = MessageTemplate.DriverApprovedMail(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["DriverName"].ToString(), table.Rows[0]["UserRole"].ToString());
                         string SMSText = MessageTemplate.DriverApprovedSMS(table.Rows[0]["AutoDriverId"].ToString(), table.Rows[0]["UserRole"].ToString());
-                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CustomerEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["DriverEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
                         SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
                     }
                 }
