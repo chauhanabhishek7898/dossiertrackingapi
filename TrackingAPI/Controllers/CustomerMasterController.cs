@@ -95,6 +95,66 @@ namespace TrackingAPI.Controllers
             }
             return new JsonResult(table);
         }
+
+        [HttpGet]
+        [Route("GetCustomerDetailsForAdmin/{vGeneric}")]
+        public JsonResult GetCustomerDetailsForAdmin(string vGeneric)
+        {
+            string query = "DM_sp_GetCustomerDetailsForAdmin";
+            if (vGeneric == "null") { vGeneric = null; }
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vGeneric", vGeneric);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetCustomerSavedAddressForAdmin/{vGeneric}")]
+        public JsonResult GetCustomerSavedAddressForAdmin(string vGeneric)
+        {
+            string query = "DM_sp_GetCustomerSavedAddressForAdmin";
+            if (vGeneric == "null") { vGeneric = null; }
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vGeneric", vGeneric);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpPut]
+        [Route("ActivateRevokeRightsOfCustomer")]
+        public JsonResult ActivateRevokeRightsOfCustomer(UserMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_ActivateRevokeRightsOfCustomer";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nUserId", CM.nUserId);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Record Updated Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 
     public class CustomerMasterClass
