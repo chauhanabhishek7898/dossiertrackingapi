@@ -59,7 +59,7 @@ namespace TrackingAPI.Models
         //Driver creation Message
         public static string SubDriverApproved => "Driver Approved by APP Administrator";
         public static string DriverApprovedMail(string AutoRegId, string UserName, string UserRole)
-        { return $"Dear <strong>{UserName}</strong>, Your request for DCPL Sign In for: <strong>{UserRole}<strong> login, with Registration Code: <strong>{AutoRegId}<strong>, has been successfully approved by the APP Administrator. Please use mobile APP to access the application. "; }
+        { return $"Dear <strong>{UserName}</strong>, Your request for DCPL Sign In for: <strong>{UserRole}</strong> login, with Registration Code: <strong>{AutoRegId}</strong>, has been successfully approved by the APP Administrator. Please use mobile APP to access the application. "; }
         public static string DriverApprovedSMS(string AutoRegId, string UserRole)
         { return $"Your request for DCPL Sign In for: {UserRole} login, with Registration Code: {AutoRegId}, has been successfully approved by the APP Administrator. Please use mobile APP to access the application."; }
 
