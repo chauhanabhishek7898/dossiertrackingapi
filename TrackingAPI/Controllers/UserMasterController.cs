@@ -247,5 +247,29 @@ namespace TrackingAPI.Controllers
             }
             return new JsonResult(DS);
         }
+
+        [HttpPost]
+        [Route("AdminSignUp_Insert")]
+        public JsonResult AdminSignUp_Insert(UserMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_AdminSignUp_Insert";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("vFullName", CM.vFullName);
+                        myCommand.Parameters.AddWithValue("vPassword", CM.vPassword);
+                        myCommand.Parameters.AddWithValue("vMobileNo", CM.vMobileNo);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Record Added Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }
