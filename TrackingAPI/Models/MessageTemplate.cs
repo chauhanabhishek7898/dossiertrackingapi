@@ -65,10 +65,10 @@ namespace TrackingAPI.Models
 
         //Corporate Registration
         public static string SubER => "DCPL: Corporate Registration";
-        public static string ERSMS(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string memberCode)
-        { return $"Dear {vContactPersonOwner}, your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Reg. Code: {memberCode}. Though, Approval awaited from APP Administrator."; }
-        public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string memberCode)
-        { return $"Dear <strong>{vContactPersonOwner}<,strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Reg. Code: <strong>{memberCode}</strong>. Though, Approval awaited from APP Administrator."; }
+        public static string ERSMS(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
+        { return $"Dear {vContactPersonOwner}, your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Username: {vMobileNo}. Though, Approval awaited from APP Administrator."; }
+        public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
+        { return $"Dear <strong>{vContactPersonOwner}<,strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Username: <strong>{vMobileNo}</strong>. Though, Approval awaited from APP Administrator."; }
 
     }
 }
