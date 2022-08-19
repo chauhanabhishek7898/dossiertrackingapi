@@ -63,7 +63,12 @@ namespace TrackingAPI.Models
         public static string DriverApprovedSMS(string AutoRegId, string UserRole)
         { return $"Your request for DCPL Sign In for: {UserRole} login, with Registration Code: {AutoRegId}, has been successfully approved by the APP Administrator. Please use mobile APP to access the application."; }
 
+        //Corporate Registration
+        public static string SubER => "DCPL: Corporate Registration";
+        public static string ERSMS(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string memberCode)
+        { return $"Dear {vContactPersonOwner}, your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Reg. Code: {memberCode}. Though, Approval awaited from APP Administrator."; }
+        public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string memberCode)
+        { return $"Dear <strong>{vContactPersonOwner}<,strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Reg. Code: <strong>{memberCode}</strong>. Though, Approval awaited from APP Administrator."; }
+
     }
 }
-
-//Your request for DCPL Sign In for: {#var#} login, with Registration Code: {#var#}, has been successfully approved by the APP Administrator. Please use mobile APP to access the application.
