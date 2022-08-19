@@ -70,5 +70,11 @@ namespace TrackingAPI.Models
         public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
         { return $"Dear <strong>{vContactPersonOwner}<,strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Username: <strong>{vMobileNo}</strong>. Though, Approval awaited from APP Administrator."; }
 
+        //Corporate Registration Approval
+        public static string SubActivationOfEstablishment => "DCPL - Corporate Registration Approved";
+        public static string ActivationOfEstablishmentSMS(string vEstablishmentName)
+        { return $"{vEstablishmentName} - Corporate Registration has been successfully approved by DCPL APP Administrator."; }
+        public static string ActivationOfEstablishmentMail(string vEstablishmentName)
+        { return $"<strong>{vEstablishmentName}</strong> - Corporate Registration has been successfully approved by DCPL APP Administrator."; }
     }
 }
