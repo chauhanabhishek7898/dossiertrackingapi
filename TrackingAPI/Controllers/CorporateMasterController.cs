@@ -169,6 +169,52 @@ namespace TrackingAPI.Controllers
             return new JsonResult(table);
         }
 
+        [HttpPut]
+        [Route("CorporateEmail_Update")]
+        public JsonResult CorporateEmail_Update(CorporateMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_CorporateEmail_Update";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nUserId", CM.nUserId);
+                        myCommand.Parameters.AddWithValue("vCPEmailId", CM.vCPEmailId);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Record Updated Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        [HttpPut]
+        [Route("CorporateMobileNo_Update")]
+        public JsonResult CorporateMobileNo_Update(CorporateMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_CorporateMobileNo_Update";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nUserId", CM.nUserId);
+                        myCommand.Parameters.AddWithValue("vCPMobileNo", CM.vCPMobileNo);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Record Updated Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
     }
 
     public class CorporateMasterClass

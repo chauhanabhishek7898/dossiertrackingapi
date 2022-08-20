@@ -23,5 +23,6 @@
         public string vLogoFilePath { get; set; }
         public bool btActive { get; set; }
         public string vPassword { get; set; }
+        public int nUserId { get; set; }
     }
 }
