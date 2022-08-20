@@ -104,6 +104,71 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpGet]
+        [Route("ForApprovalNewCorporates")]
+        public JsonResult ForApprovalNewCorporates()
+        {
+            string query = "DM_sp_ForApprovalNewCorporates";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpPut]
+        [Route("ApproveCorporates")]
+        public JsonResult ApproveCorporates(CorporateMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_ApproveCorporates";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nEId", CM.nEId);
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+
+                        //Send Email and Sms
+                        string MailSubject = MessageTemplate.SubActivationOfEstablishment;
+                        string EmailText = MessageTemplate.ActivationOfEstablishmentMail(table.Rows[0]["vEstablishmentName"].ToString());
+                        string SMSText = MessageTemplate.ActivationOfEstablishmentSMS(table.Rows[0]["vEstablishmentName"].ToString());
+                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["vCPEmailId"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                        SmsSender.SendSmsText(SMSText, table.Rows[0]["CombinedMobileNo"].ToString());
+                    }
+                }
+                return new JsonResult("Corporate Approved Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        [HttpGet]
+        [Route("GetCorporateDetailsForAdmin/{vGeneric}")]
+        public JsonResult GetCorporateDetailsForAdmin(string vGeneric)
+        {
+            string query = "DM_sp_GetCorporateDetailsForAdmin";
+            if (vGeneric == "null") { vGeneric = null; }
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vGeneric", vGeneric);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
     }
 
     public class CorporateMasterClass
