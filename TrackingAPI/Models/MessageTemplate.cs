@@ -68,7 +68,7 @@ namespace TrackingAPI.Models
         public static string ERSMS(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
         { return $"Dear {vContactPersonOwner}, your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Username: {vMobileNo}. Though, Approval awaited from APP Administrator."; }
         public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
-        { return $"Dear <strong>{vContactPersonOwner}<,strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Username: <strong>{vMobileNo}</strong>. Though, Approval awaited from APP Administrator."; }
+        { return $"Dear <strong>{vContactPersonOwner}</strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Username: <strong>{vMobileNo}</strong>. Though, Approval awaited from APP Administrator."; }
 
         //Corporate Registration Approval
         public static string SubActivationOfEstablishment => "DCPL - Corporate Registration Approved";
