@@ -12,6 +12,7 @@
         public bool btActive { get; set; }
         public bool btPromotion { get; set; }
         public string vMobileNoOrEmailId { get; set; }
+        public int nLoggedInUserId { get; set; }
 
     }
 }

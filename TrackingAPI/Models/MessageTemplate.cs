@@ -66,15 +66,15 @@ namespace TrackingAPI.Models
         //Corporate Registration
         public static string SubER => "DCPL: Corporate Registration";
         public static string ERSMS(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
-        { return $"Dear {vContactPersonOwner}, your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Username: {vMobileNo}. Though, Approval awaited from APP Administrator."; }
+        { return $"Your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Username: {vMobileNo}. Though, Approval awaited from APP Administrator."; }
         public static string ERMail(string vContactPersonOwner, string vEType, string vEstablishmentName, string vEId, string role, string vMobileNo)
         { return $"Dear <strong>{vContactPersonOwner}</strong>, your <strong>{vEType}</strong> Registration - <strong>{vEstablishmentName}</strong>, with DCPL is Successfully done, with Reg. Code: <strong>{vEId}</strong>. Also, you have successfully registered for <strong>{role}</strong> login, with Username: <strong>{vMobileNo}</strong>. Though, Approval awaited from APP Administrator."; }
 
         //Corporate Registration Approval
         public static string SubActivationOfEstablishment => "DCPL - Corporate Registration Approved";
         public static string ActivationOfEstablishmentSMS(string vEstablishmentName)
-        { return $"{vEstablishmentName} - Corporate Registration has been successfully approved by DCPL APP Administrator."; }
+        { return $"{vEstablishmentName} - Corporate Registration has been successfully approved by DCPL APP Administrator. Please use mobile APP to access the application."; }
         public static string ActivationOfEstablishmentMail(string vEstablishmentName)
-        { return $"<strong>{vEstablishmentName}</strong> - Corporate Registration has been successfully approved by DCPL APP Administrator."; }
+        { return $"<strong>{vEstablishmentName}</strong> - Corporate Registration has been successfully approved by DCPL APP Administrator. Please use mobile APP to access the application."; }
     }
 }

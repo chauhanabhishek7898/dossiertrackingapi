@@ -215,6 +215,31 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpPost]
+        [Route("CorporateAssistantSignUp_Insert")]
+        public JsonResult CorporateAssistantSignUp_Insert(UserMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_CorporateAssistantSignUp_Insert";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
+                        myCommand.Parameters.AddWithValue("vFullName", CM.vFullName);
+                        myCommand.Parameters.AddWithValue("vPassword", CM.vPassword);
+                        myCommand.Parameters.AddWithValue("vMobileNo", CM.vMobileNo);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Assistant Added Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
     }
 
     public class CorporateMasterClass
