@@ -240,6 +240,46 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpGet]
+        [Route("GetCorporateAssistants/{nLoggedInUserId}")]
+        public JsonResult GetCorporateAssistants(int nLoggedInUserId)
+        {
+            string query = "DM_sp_GetCorporateAssistants";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nLoggedInUserId", nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpPut]
+        [Route("ActivateRevokeRightsCorporateAssistant")]
+        public JsonResult ActivateRevokeRightsCorporateAssistant(UserMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_ActivateRevokeRightsCorporateAssistant";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nCLinkId", CM.nCLinkId);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Rights Updated Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
     }
 
     public class CorporateMasterClass

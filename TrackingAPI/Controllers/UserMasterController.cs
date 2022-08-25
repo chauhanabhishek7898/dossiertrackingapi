@@ -271,5 +271,23 @@ namespace TrackingAPI.Controllers
             }
             catch (Exception ex) { throw ex; }
         }
+
+        [HttpGet]
+        [Route("GetUsersDetails_Report")]
+        public JsonResult GetUsersDetails_Report()
+        {
+            string query = "DM_sp_GetUsersDetails_Report";
+            string token = string.Empty; DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
     }
 }

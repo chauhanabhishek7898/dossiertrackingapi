@@ -13,6 +13,7 @@
         public bool btPromotion { get; set; }
         public string vMobileNoOrEmailId { get; set; }
         public int nLoggedInUserId { get; set; }
+        public int nCLinkId { get; set; }
 
     }
 }
