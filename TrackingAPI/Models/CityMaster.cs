@@ -7,6 +7,6 @@
         public int nStateId { get; set; }
         public bool btActive { get; set; }
         public bool btMainInterRelatedCity { get; set; }
-        public int nInterRelatedCityId { get; set; }
+        public int? nInterRelatedCityId { get; set; }
     }
 }
