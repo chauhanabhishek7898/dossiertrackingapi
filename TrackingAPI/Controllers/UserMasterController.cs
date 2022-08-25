@@ -289,5 +289,27 @@ namespace TrackingAPI.Controllers
             }
             return new JsonResult(table);
         }
+
+        [HttpPut]
+        [Route("ActivateRevokeRightsOfUser")]
+        public JsonResult ActivateRevokeRightsOfUser(UserMaster CM)
+        {
+            try
+            {
+                string query = "DM_sp_ActivateRevokeRightsOfUser";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nUserId", CM.nUserId);
+                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                    }
+                }
+                return new JsonResult("Rights Updated Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }
