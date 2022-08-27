@@ -280,6 +280,24 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpGet]
+        [Route("CorporateMaster_SelectBynEId/{nUserId}")]
+        public JsonResult CorporateMaster_SelectBynEId(int nUserId)
+        {
+            string query = "DM_sp_CorporateMaster_SelectBynEId";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nUserId", nUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
     }
 
     public class CorporateMasterClass
