@@ -283,5 +283,77 @@ namespace TrackingAPI.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("GetSavedaddresses/{@nLoggedInUserId}")]
+        public JsonResult GetSAvedAddresses(int @nLoggedInUserId)
+        {
+            string query = "DM_sp_GetSavedAddresses";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@nLoggedInUserId", @nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetTop5SourceAddresses/{@nLoggedInUserId}")]
+        public JsonResult GetTop5SourceAddresses(int @nLoggedInUserId)
+        {
+            string query = "DM_sp_GetTop5SourceAddresses";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@nLoggedInUserId", @nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetTop5DestinationAddresses/{@nLoggedInUserId}")]
+        public JsonResult GetTop5DestinationAddresses(int @nLoggedInUserId)
+        {
+            string query = "DM_sp_GetTop5DestinationAddresses";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@nLoggedInUserId", @nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetUnPaidStatusofCustomer/{@nLoggedInUserId}")]
+        public JsonResult GetUnPaidStatusofCustomer(int @nLoggedInUserId)
+        {
+            string query = "DM_sp_GetUnPaidStatusofCustomer";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@nLoggedInUserId", @nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
     }
 }
