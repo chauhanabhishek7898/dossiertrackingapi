@@ -22,6 +22,27 @@ namespace TrackingAPI.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet]
+        [Route("GetRates/{vCity}/{nR1KMs}/{nR2KMs}/{nR3KMs}")]
+        public JsonResult GetRates(string vCity, string nR1KMs, string nR2KMs, string nR3KMs)
+        {
+            string query = "DM_sp_GetRates";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("vCity", vCity);
+                    myCommand.Parameters.AddWithValue("nR1KMs", nR1KMs);
+                    myCommand.Parameters.AddWithValue("nR2KMs", nR2KMs);
+                    myCommand.Parameters.AddWithValue("nR3KMs", nR3KMs);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
         [HttpPost]
         public JsonResult Post(OrderDetails CM)
         {
