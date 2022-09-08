@@ -78,3 +78,6 @@ namespace TrackingAPI.Models
         { return $"<strong>{vEstablishmentName}</strong> - Corporate Registration has been successfully approved by DCPL APP Administrator. Please use mobile APP to access the application."; }
     }
 }
+
+//Your {#var#} Registration - {#var#}, with DCPL is Successfully done, with Reg. Code: {#var#}. Also, you have successfully registered for {role} login, with Username: {#var#}. Though, Approval awaited from APP Administrator.
+//Your {vEType} Registration - {vEstablishmentName}, with DCPL is Successfully done, with Reg. Code: {vEId}. Also, you have successfully registered for {role} login, with Username: {vMobileNo}. Though, Approval awaited from APP Administrator.

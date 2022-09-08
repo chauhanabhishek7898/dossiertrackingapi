@@ -40,10 +40,11 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetUserDetailsByUserId/{nUserId}")]
-        public JsonResult GetUserDetailsByUserId(int nUserId)
+        [Route("GetUserDetailsByUserId/{nUserId}/{vDeviceId}")]
+        public JsonResult GetUserDetailsByUserId(int nUserId, string vDeviceId)
         {
             string query = "DM_sp_GetUserDetailsByUserId";
+            if (vDeviceId == "null") { vDeviceId = null; }
             DataTable table = new DataTable(); string token = string.Empty;
             string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
@@ -51,7 +52,7 @@ namespace TrackingAPI.Controllers
                 myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.CommandType = CommandType.StoredProcedure;
-                    myCommand.Parameters.AddWithValue("nUserId", nUserId);
+                    myCommand.Parameters.AddWithValue("nUserId", nUserId); myCommand.Parameters.AddWithValue("vDeviceId", vDeviceId);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     if (table.Rows.Count > 0)
                     {
@@ -88,10 +89,11 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetUserDetailsUsingUNandPW/{vUserName}/{vPassword}")]
-        public JsonResult GetUserDetailsUsingUNandPW(string vUserName, string vPassword)
+        [Route("GetUserDetailsUsingUNandPW/{vUserName}/{vPassword}/{vDeviceId}")]
+        public JsonResult GetUserDetailsUsingUNandPW(string vUserName, string vPassword, string vDeviceId)
         {
             string query = "DM_sp_GetUserDetailsUsingUNandPW";
+            if (vDeviceId == "null") { vDeviceId = null; }
             string token = string.Empty; DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -100,6 +102,7 @@ namespace TrackingAPI.Controllers
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("vUserName", vUserName);
                     myCommand.Parameters.AddWithValue("vPassword", vPassword);
+                    myCommand.Parameters.AddWithValue("vDeviceId", vDeviceId);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     if (table.Rows.Count > 0)
                     {

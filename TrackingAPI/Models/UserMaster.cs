@@ -14,6 +14,7 @@
         public string vMobileNoOrEmailId { get; set; }
         public int nLoggedInUserId { get; set; }
         public int nCLinkId { get; set; }
+        public string vDeviceId { get; set; }
 
     }
 }
