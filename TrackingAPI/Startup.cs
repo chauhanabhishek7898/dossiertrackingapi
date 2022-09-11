@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrackingAPI.Service;
+using TrackingAPI.Hubs;
 
 namespace TrackingAPI
 {
@@ -38,7 +39,7 @@ namespace TrackingAPI
             services.AddSingleton<IPushNotificationService, PushNotificationService>();
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
             .Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
+            services.AddSignalR();
             services.AddControllers();
 
             //JWT Token
@@ -61,7 +62,8 @@ namespace TrackingAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowOrigin");
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             if (env.IsDevelopment())
             {
@@ -75,6 +77,7 @@ namespace TrackingAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<TrackingHub>("/TrackingHub");
                 endpoints.MapControllers();
             });
         }

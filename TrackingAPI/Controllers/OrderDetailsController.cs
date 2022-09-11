@@ -11,9 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using TrackingAPI.Utilities;
 using TrackingAPI.Hubs;
-
-
-
+using Microsoft.AspNetCore.SignalR;
 
 namespace TrackingAPI.Controllers
 {
@@ -23,6 +21,14 @@ namespace TrackingAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IPushNotificationService _pushNotificationService;
+        private static IHubContext<TrackingHub> HubContext;
+        public static IHubContext<TrackingHub> getHubContext
+        {
+            get
+            {
+                return HubContext;
+            }
+        }
         //private static IHubContext<ChatHub> HubContext;
         //public static IHubContext<ChatHub> getHubContext
         //{
@@ -31,12 +37,13 @@ namespace TrackingAPI.Controllers
         //        return HubContext;
         //    }
         //}
-        public OrderDetailsController(IConfiguration configuration,IPushNotificationService pushNotificationService)
+        public OrderDetailsController(IConfiguration configuration,IPushNotificationService pushNotificationService, IHubContext<TrackingHub> hubcontext)
         {
             _configuration = configuration;
             _pushNotificationService = pushNotificationService;
-            
-    }
+            HubContext = hubcontext;
+
+        }
 
         [HttpGet]
         [Route("GetRates/{vCity}/{nR1KMs}/{nR2KMs}/{nR3KMs}")]
@@ -161,7 +168,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("PickOrderByDriver")]
-        public JsonResult PickOrderByDriver(OrderDetails CM)
+        public async Task<JsonResult> PickOrderByDriver(OrderDetails CM)
         {
             try
             {
@@ -175,8 +182,10 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+
                     }
                 }
+                await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(CM));
                 return new JsonResult("Order Picked by Driver Successfully !!");
             }
             catch (Exception ex) { throw ex; }
