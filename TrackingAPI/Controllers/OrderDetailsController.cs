@@ -72,7 +72,7 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_O1_OrderDetails_Insert";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
                     myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -102,7 +102,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vD3Long", CM.vD3Long);
                         myCommand.Parameters.AddWithValue("vD3Address", CM.vD3Address);
 
-                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage", PMC.ChatDetails[0].nUserId, JsonConvert.SerializeObject(PMC.ChatDetails));
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage");
                         // Firebases
@@ -118,7 +118,7 @@ namespace TrackingAPI.Controllers
                         }
                     }
                 }
-                return new JsonResult("Record Added Successfully !!");
+                return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
         }
