@@ -174,7 +174,7 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_O4_PickOrderByDriver";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
                     myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -182,12 +182,11 @@ namespace TrackingAPI.Controllers
                         myCommand.CommandType = CommandType.StoredProcedure;
                         myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
-                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
-
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
                 await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(CM));
-                return new JsonResult("Order Picked by Driver Successfully !!");
+                return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
         }
