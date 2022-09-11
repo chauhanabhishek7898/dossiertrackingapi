@@ -72,7 +72,8 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_O1_OrderDetails_Insert";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                DataSet DS = new DataSet(); DataTable TAB1 = new DataTable(); DataTable TAB2 = new DataTable(); TAB1.TableName = "TAB1"; TAB2.TableName = "TAB2";
+                DS.Tables.Add(TAB1); DS.Tables.Add(TAB2); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
                     myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -102,7 +103,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vD3Long", CM.vD3Long);
                         myCommand.Parameters.AddWithValue("vD3Address", CM.vD3Address);
 
-                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                        myReader = myCommand.ExecuteReader(); DS.Load(myReader, LoadOption.OverwriteChanges, TAB1, TAB2); myReader.Close(); myCon.Close();
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage", PMC.ChatDetails[0].nUserId, JsonConvert.SerializeObject(PMC.ChatDetails));
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage");
                         // Firebases
@@ -118,7 +119,7 @@ namespace TrackingAPI.Controllers
                         }
                     }
                 }
-                return new JsonResult(table);
+                return new JsonResult(DS);
             }
             catch (Exception ex) { throw ex; }
         }
