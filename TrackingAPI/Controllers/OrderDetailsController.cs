@@ -4,11 +4,16 @@ using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using TrackingAPI.Models;
+using TrackingAPI.Service;
 using Newtonsoft.Json;
 using System;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using TrackingAPI.Utilities;
+using TrackingAPI.Hubs;
+
+
+
 
 namespace TrackingAPI.Controllers
 {
@@ -17,10 +22,21 @@ namespace TrackingAPI.Controllers
     public class OrderDetailsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public OrderDetailsController(IConfiguration configuration)
+        private readonly IPushNotificationService _pushNotificationService;
+        //private static IHubContext<ChatHub> HubContext;
+        //public static IHubContext<ChatHub> getHubContext
+        //{
+        //    get
+        //    {
+        //        return HubContext;
+        //    }
+        //}
+        public OrderDetailsController(IConfiguration configuration,IPushNotificationService pushNotificationService)
         {
             _configuration = configuration;
-        }
+            _pushNotificationService = pushNotificationService;
+            
+    }
 
         [HttpGet]
         [Route("GetRates/{vCity}/{nR1KMs}/{nR2KMs}/{nR3KMs}")]
@@ -80,6 +96,19 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vD3Address", CM.vD3Address);
 
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                        //await HubContext.Clients.All.SendAsync("BroadcastMessage", PMC.ChatDetails[0].nUserId, JsonConvert.SerializeObject(PMC.ChatDetails));
+                        //await HubContext.Clients.All.SendAsync("BroadcastMessage");
+                        // Firebases
+                        List<string> devicesId = new List<string>();
+                        //foreach (DataRow row in table.Rows)
+                        //{
+                        //    devicesId.Add(row["vDeviceId"].ToString());
+                        //}
+                        devicesId.Add("efVSCdU4Q6SvD4iEtqrVOO:APA91bHNpBEa2X3yGrZgEa9YoEh0arjuKZ61KVC2RHLohc6PcK1sZ4rRhHDxf-7LtE-XwKwatPXOR2Bmof3SMlp_aKJNVMXvOCxzo-vGvuEul8Ee7iW2wp4vA2dgK_Tf52d953xwvZXc");
+                        if (devicesId.Count > 0)
+                        {
+                            _pushNotificationService.SendNotificationToDrivers("hello", devicesId);
+                        }
                     }
                 }
                 return new JsonResult("Record Added Successfully !!");
