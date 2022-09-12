@@ -108,15 +108,15 @@ namespace TrackingAPI.Controllers
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage");
                         // Firebases
                         List<string> devicesId = new List<string>();
-                        //foreach (DataRow row in table.Rows)
-                        //{
-                        //    devicesId.Add(row["vDeviceId"].ToString());
-                        //}
-                        devicesId.Add("efVSCdU4Q6SvD4iEtqrVOO:APA91bHNpBEa2X3yGrZgEa9YoEh0arjuKZ61KVC2RHLohc6PcK1sZ4rRhHDxf-7LtE-XwKwatPXOR2Bmof3SMlp_aKJNVMXvOCxzo-vGvuEul8Ee7iW2wp4vA2dgK_Tf52d953xwvZXc");
+                        foreach (DataRow row in TAB2.Rows)
+                        {
+                            devicesId.Add(row["vDeviceId"].ToString());
+                        }
                         if (devicesId.Count > 0)
                         {
-                            _pushNotificationService.SendNotificationToDrivers("hello", devicesId);
+                           _pushNotificationService.SendNotificationToDrivers(TAB1, devicesId);
                         }
+
                     }
                 }
                 return new JsonResult(DS);

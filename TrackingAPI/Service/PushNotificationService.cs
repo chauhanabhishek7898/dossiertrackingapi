@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Data;
 
 namespace TrackingAPI.Service
 {
@@ -24,7 +24,7 @@ namespace TrackingAPI.Service
 
         }
 
-        public async Task SendNotificationToDrivers(OrderDetails orderDetails,List<String> deviceList)
+        public async Task SendNotificationToDrivers(DataTable orderDetails,List<String> deviceList)
         {
             var anony_object = new
             {
@@ -33,12 +33,12 @@ namespace TrackingAPI.Service
                 collapse_key = "type_a",
                 notification = new
                 {
-                    body = orderDetails.vSource,
+                    body = orderDetails.Rows[0]["CEmail"],
                     title = "Title of Your Notification"
                 },
                 data = new
                 {
-                    body = orderDetails.vSource,
+                    body = orderDetails.Rows[0]["CEmail"],
                     title = "Title of Your Notification in Title",
                     //key_1 = "Value for key_1",
                     //key_2 = "Value for key_2"
