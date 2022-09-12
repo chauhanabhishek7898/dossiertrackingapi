@@ -233,7 +233,7 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_UpdateDriver_CurrentLocation";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
 
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
@@ -243,10 +243,10 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nDriverUserId", CM.nUserId);
                         myCommand.Parameters.AddWithValue("vDiriverCurrentLat", CM.vDiriverCurrentLat);
                         myCommand.Parameters.AddWithValue("vDiriverCurrentLong", CM.vDiriverCurrentLong);
-                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
-                return new JsonResult("Record Updated Successfully !!");
+                return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
         }
