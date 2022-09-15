@@ -40,6 +40,8 @@
         public string vD3Lat { get; set; }
         public string vD3Long { get; set; }
         public string vD3Address { get; set; }
-
+        public string vItemType { get; set; }
+        public bool btCancel { get; set; }
+        public string vCancellationReason { get; set; }
     }
 }

@@ -102,6 +102,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("vD3Lat", CM.vD3Lat);
                         myCommand.Parameters.AddWithValue("vD3Long", CM.vD3Long);
                         myCommand.Parameters.AddWithValue("vD3Address", CM.vD3Address);
+                        myCommand.Parameters.AddWithValue("vItemType", CM.vItemType);
 
                         myReader = myCommand.ExecuteReader(); DS.Load(myReader, LoadOption.OverwriteChanges, TAB1, TAB2); myReader.Close(); myCon.Close();
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage", PMC.ChatDetails[0].nUserId, JsonConvert.SerializeObject(PMC.ChatDetails));
@@ -159,6 +160,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
                         myCommand.Parameters.AddWithValue("vRemarks", CM.vRemarks);
+                        myCommand.Parameters.AddWithValue("vCancellationReason", CM.vCancellationReason);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
@@ -206,6 +208,7 @@ namespace TrackingAPI.Controllers
                         myCommand.CommandType = CommandType.StoredProcedure;
                         myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
+                        myCommand.Parameters.AddWithValue("vCancellationReason", CM.vCancellationReason);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
@@ -414,5 +417,42 @@ namespace TrackingAPI.Controllers
             return new JsonResult(table);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> Post(IFormFile PhotoFile)
+        {
+            try
+            {
+                string OrderDetailsPhotosJson = Request.Form["OrderDetailsPhotos"];
+                OrderDetailsPhotosClass PMC = JsonConvert.DeserializeObject<OrderDetailsPhotosClass>(OrderDetailsPhotosJson);
+                string CurrentDt = DateTime.Now.ToString("ddMMyyyyHHmm");
+                if (PhotoFile != null)
+                {
+                    var vPhotoFilePath = $"assets//OrderDetailsPhotos//PMC.OrderDetailsPhotos[0].nTrackId//{CurrentDt}//PhotoFile//{PhotoFile.FileName}";
+                    var response = await ImageUploader.SaveImage(PhotoFile, PMC.OrderDetailsPhotos[0].nTrackId, vPhotoFilePath);
+                    PMC.OrderDetailsPhotos[0].vPhotoFilePath = vPhotoFilePath;
+                }
+                string query = "DM_sp_OrderDetailsPhoto_Insert";
+
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                var JsonInput = JsonConvert.SerializeObject(PMC);
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("JSON_INPUT", JsonInput);
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+    }
+
+    public class OrderDetailsPhotosClass
+    {
+        public List<OrderDetailsPhotos> OrderDetailsPhotos { get; set; }
     }
 }
