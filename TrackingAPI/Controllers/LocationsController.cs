@@ -12,6 +12,7 @@ using TrackingAPI.Hubs;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace TrackingAPI.Controllers
 {
@@ -46,15 +47,20 @@ namespace TrackingAPI.Controllers
             try
             {
                 var rawRequestBody = await Request.GetRawBodyAsync();
-                var data = JsonSerializer.Deserialize<Root>(rawRequestBody);
+                //JsonSerializerOptions options = new JsonSerializerOptions()
+                //{
+                //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                //    WriteIndented = true
+                //};
+                var data = System.Text.Json.JsonSerializer.Deserialize<Root>(rawRequestBody);
                 if (data.location.Count > 0)
                 {
                     var userId = data.user_id;
-                    int count = data.location.Count;
-                    var lat = data.location[count - 1].coords.latitude;
-                    var longt = data.location[count - 1].coords.longitude;
-                    var speed= data.location[count - 1].coords.speed;
-                    var time = data.location[count - 1].timestamp;
+                   // int count = data.location.Count;
+                    var lat = data.location[0].coords.latitude;
+                    var longt = data.location[0].coords.longitude;
+                    var speed= data.location[0].coords.speed;
+                    var time = data.location[0].timestamp;
                     string query = "DM_sp_GetUserIdsForDriver";
                     DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                     using (SqlConnection myCon = new SqlConnection(sqlDataSource))
@@ -66,7 +72,7 @@ namespace TrackingAPI.Controllers
                             myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                         }
                     }
-                    await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, JsonSerializer.Serialize(table), JsonSerializer.Serialize(new {
+                    await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, JsonConvert.SerializeObject(table), JsonConvert.SerializeObject(new {
                     lat= lat,
                     lng=longt,
                     speed= speed,

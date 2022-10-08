@@ -418,6 +418,7 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpPost]
+        [Route("UploadImage")]
         public async Task<JsonResult> Post(IFormFile PhotoFile)
         {
             try
