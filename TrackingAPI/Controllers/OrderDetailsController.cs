@@ -37,7 +37,7 @@ namespace TrackingAPI.Controllers
         //        return HubContext;
         //    }
         //}
-        public OrderDetailsController(IConfiguration configuration,IPushNotificationService pushNotificationService, IHubContext<TrackingHub> hubcontext)
+        public OrderDetailsController(IConfiguration configuration, IPushNotificationService pushNotificationService, IHubContext<TrackingHub> hubcontext)
         {
             _configuration = configuration;
             _pushNotificationService = pushNotificationService;
@@ -115,7 +115,7 @@ namespace TrackingAPI.Controllers
                         }
                         if (devicesId.Count > 0)
                         {
-                           _pushNotificationService.SendNotificationToDrivers(TAB1, devicesId);
+                            _pushNotificationService.SendNotificationToDrivers(TAB1, devicesId);
                         }
 
                     }
@@ -126,8 +126,8 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetOrderDetails_Pending/{nCityId}/{dtDated}")]
-        public JsonResult GetOrderDetails_Pending(int nCityId, string dtDated)
+        [Route("GetOrderDetails_Pending/{nCityId}/{dtDated}/{nDriverUserId}")]
+        public JsonResult GetOrderDetails_Pending(int nCityId, string dtDated, int nDriverUserId)
         {
             string query = "DM_sp_O2_GetOrderDetails_Pending";
             DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
@@ -138,6 +138,7 @@ namespace TrackingAPI.Controllers
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("nCityId", nCityId);
                     myCommand.Parameters.AddWithValue("dtDated", dtDated);
+                    myCommand.Parameters.AddWithValue("nDriverUserId", nDriverUserId);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                 }
             }
