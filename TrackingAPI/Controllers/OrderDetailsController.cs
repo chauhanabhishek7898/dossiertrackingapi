@@ -86,6 +86,12 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nR1KMs", CM.nR1KMs);
                         myCommand.Parameters.AddWithValue("nR2KMs", CM.nR2KMs);
                         myCommand.Parameters.AddWithValue("nR3KMs", CM.nR3KMs);
+                        myCommand.Parameters.AddWithValue("vCustomerName1", CM.vCustomerName1);
+                        myCommand.Parameters.AddWithValue("vCustomerMobileNo1", CM.vCustomerMobileNo1);
+                        myCommand.Parameters.AddWithValue("vCustomerName2", CM.vCustomerName2);
+                        myCommand.Parameters.AddWithValue("vCustomerMobileNo2", CM.vCustomerMobileNo2);
+                        myCommand.Parameters.AddWithValue("vCustomerName3", CM.vCustomerName3);
+                        myCommand.Parameters.AddWithValue("vCustomerMobileNo3", CM.vCustomerMobileNo3);
                         myCommand.Parameters.AddWithValue("vSource", CM.vSource);
                         myCommand.Parameters.AddWithValue("vSourceLat", CM.vSourceLat);
                         myCommand.Parameters.AddWithValue("vSourceLong", CM.vSourceLong);

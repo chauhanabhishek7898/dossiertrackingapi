@@ -24,6 +24,12 @@
         public double nR1KMs { get; set; }
         public double? nR2KMs { get; set; }
         public double? nR3KMs { get; set; }
+        public string vCustomerName1 { get; set; }
+        public string vCustomerMobileNo1 { get; set; }
+        public string vCustomerName2 { get; set; }
+        public string vCustomerMobileNo2 { get; set; }
+        public string vCustomerName3 { get; set; }
+        public string vCustomerMobileNo3 { get; set; }
         public string vSource { get; set; }
         public string vSourceLat { get; set; }
         public string vSourceLong { get; set; }
