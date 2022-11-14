@@ -260,7 +260,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("UpdateOrder_PickUpPointStartTimeByDriver")]
-        public JsonResult UpdateOrder_PickUpPointStartTimeByDriver(OrderDetails CM)
+        public async Task<JsonResult> UpdateOrder_PickUpPointStartTimeByDriver(OrderDetails CM)
         {
             try
             {
@@ -276,6 +276,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
+                await HubContext.Clients.All.SendAsync("PickupStarted", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }

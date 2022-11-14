@@ -41,52 +41,170 @@ namespace TrackingAPI.Controllers
         {
             return "hello";
         }
+        //[HttpPost]
+        //public async  Task Post()
+        //{
+        //    try
+        //    {
+        //        var rawRequestBody = await Request.GetRawBodyAsync();
+        //        //JsonSerializerOptions options = new JsonSerializerOptions()
+        //        //{
+        //        //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        //        //    WriteIndented = true
+        //        //};
+        //        var data = System.Text.Json.JsonSerializer.Deserialize<Root>(rawRequestBody);
+        //        if (data.location.Count > 0)
+        //        {
+        //            var userId = data.user_id;
+        //           // int count = data.location.Count;
+        //            var lat = data.location[0].coords.latitude;
+        //            var longt = data.location[0].coords.longitude;
+        //            var speed= data.location[0].coords.speed;
+        //            var time = data.location[0].timestamp;
+        //            //string query = "DM_sp_GetUserIdsForDriver";
+        //            string query = "DM_sp_UpdateDriver_CurrentLocation";
+        //            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+        //            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //            {
+        //                //myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //                //{
+        //                //    myCommand.CommandType = CommandType.StoredProcedure;
+        //                //    myCommand.Parameters.AddWithValue("nDriverUserId", userId);
+        //                //    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+        //                //}
+        //                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //                {
+        //                    myCommand.CommandType = CommandType.StoredProcedure;
+        //                    myCommand.Parameters.AddWithValue("nDriverUserId", userId);
+        //                    myCommand.Parameters.AddWithValue("vDiriverCurrentLat", lat.ToString());
+        //                    myCommand.Parameters.AddWithValue("vDiriverCurrentLong", longt.ToString());
+        //                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+        //                }
+        //            }
+        //            await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, "", JsonConvert.SerializeObject(new {
+        //            lat= lat,
+        //            lng=longt,
+        //            speed= speed,
+        //            time=time
+        //            }));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    { 
+
+        //    }
+        //    //var res = json;
+        //}
+
+        //[HttpPost]
+        //public async Task Post()
+        //{
+        //    try
+        //    {
+        //        var rawRequestBody = await Request.GetRawBodyAsync();
+        //        //JsonSerializerOptions options = new JsonSerializerOptions()
+        //        //{
+        //        //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        //        //    WriteIndented = true
+        //        //};
+        //        var data = System.Text.Json.JsonSerializer.Deserialize<Root>(rawRequestBody);
+        //        if (data.location!=null)
+        //        {
+        //            var userId = data.user_id;
+        //            // int count = data.location.Count;
+        //            var lat = data.location.coords.latitude;
+        //            var longt = data.location.coords.longitude;
+        //            var speed = data.location.coords.speed;
+        //            var time = data.location.timestamp;
+        //            //string query = "DM_sp_GetUserIdsForDriver";
+        //            string query = "DM_sp_UpdateDriver_CurrentLocation";
+        //            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+        //            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //            {
+        //                //myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //                //{
+        //                //    myCommand.CommandType = CommandType.StoredProcedure;
+        //                //    myCommand.Parameters.AddWithValue("nDriverUserId", userId);
+        //                //    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+        //                //}
+        //                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //                {
+        //                    myCommand.CommandType = CommandType.StoredProcedure;
+        //                    myCommand.Parameters.AddWithValue("nDriverUserId", 25);
+        //                    myCommand.Parameters.AddWithValue("vDiriverCurrentLat", lat.ToString());
+        //                    myCommand.Parameters.AddWithValue("vDiriverCurrentLong", longt.ToString());
+        //                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+        //                }
+        //            }
+        //            await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, "", JsonConvert.SerializeObject(new
+        //            {
+        //                lat = lat,
+        //                lng = longt,
+        //                speed = speed,
+        //                time = time
+        //            }));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    //var res = json;
+        //}
         [HttpPost]
-        public async  Task Post()
+        public async Task LocationUpdate(DriverLocation driverLocation)
         {
             try
             {
-                var rawRequestBody = await Request.GetRawBodyAsync();
+                //var rawRequestBody = await Request.GetRawBodyAsync();
                 //JsonSerializerOptions options = new JsonSerializerOptions()
                 //{
                 //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 //    WriteIndented = true
                 //};
-                var data = System.Text.Json.JsonSerializer.Deserialize<Root>(rawRequestBody);
-                if (data.location.Count > 0)
+               // var data = System.Text.Json.JsonSerializer.Deserialize<Root>(rawRequestBody);
+                if (driverLocation != null)
                 {
-                    var userId = data.user_id;
-                   // int count = data.location.Count;
-                    var lat = data.location[0].coords.latitude;
-                    var longt = data.location[0].coords.longitude;
-                    var speed= data.location[0].coords.speed;
-                    var time = data.location[0].timestamp;
-                    string query = "DM_sp_GetUserIdsForDriver";
+                    var userId = driverLocation.userId;
+                    // int count = data.location.Count;
+                    var lat = driverLocation.lat;
+                    var longt = driverLocation.lng;
+                   
+                    //string query = "DM_sp_GetUserIdsForDriver";
+                    string query = "DM_sp_UpdateDriver_CurrentLocation";
                     DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                     using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                     {
+                        //myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                        //{
+                        //    myCommand.CommandType = CommandType.StoredProcedure;
+                        //    myCommand.Parameters.AddWithValue("nDriverUserId", userId);
+                        //    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                        //}
                         myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
                         {
                             myCommand.CommandType = CommandType.StoredProcedure;
-                            myCommand.Parameters.AddWithValue("nDriverUserId", userId);
+                            myCommand.Parameters.AddWithValue("nDriverUserId", 25);
+                            myCommand.Parameters.AddWithValue("vDiriverCurrentLat", lat.ToString());
+                            myCommand.Parameters.AddWithValue("vDiriverCurrentLong", longt.ToString());
                             myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                         }
                     }
-                    await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, JsonConvert.SerializeObject(table), JsonConvert.SerializeObject(new {
-                    lat= lat,
-                    lng=longt,
-                    speed= speed,
-                    time=time
+                    await HubContext.Clients.All.SendAsync("CurrentLocationHub", userId, "", JsonConvert.SerializeObject(new
+                    {
+                        lat = lat,
+                        lng = longt
+                        
                     }));
                 }
             }
             catch (Exception ex)
-            { 
-            
+            {
+
             }
             //var res = json;
         }
-       
+
     }
 
 
@@ -158,9 +276,17 @@ namespace TrackingAPI.Controllers
 
     public class Root
     {
-        public List<Location> location { get; set; }
+       // public List<Location> location { get; set; }
+        public Location location { get; set; }
         public int user_id { get; set; }
         public string device_id { get; set; }
+    }
+    public class DriverLocation
+    {
+        // public List<Location> location { get; set; }
+        public string lat { get; set; }
+        public string lng { get; set; }
+        public string userId { get; set; }
     }
 
 }
