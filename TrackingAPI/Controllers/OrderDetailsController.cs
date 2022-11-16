@@ -401,6 +401,27 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetOrderDetailsForDrivers/{nDriverUserId}/{FromDt}/{ToDt}/{vGeneric}")]
+        public JsonResult GetOrderDetailsForDrivers(int nDriverUserId, string FromDt, string ToDt, string vGeneric)
+        {
+            string query = "DM_sp_O93_GetOrderDetailsForDrivers";
+            if (vGeneric == "null") { vGeneric = null; }
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nDriverUserId", nDriverUserId);
+                    myCommand.Parameters.AddWithValue("FromDt", FromDt); myCommand.Parameters.AddWithValue("ToDt", ToDt);
+                    myCommand.Parameters.AddWithValue("vGeneric", vGeneric);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
         [Route("GetOrderDetailsForAdmin/{FromDt}/{ToDt}/{vGeneric}")]
         public JsonResult GetOrderDetailsForAdmin(string FromDt, string ToDt, string vGeneric)
         {
@@ -486,6 +507,24 @@ namespace TrackingAPI.Controllers
                 {
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("nLoggedInUserId", nLoggedInUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetOrderImages/{nTrackId}")]
+        public JsonResult GetOrderImages(int nTrackId)
+        {
+            string query = "DM_sp_O91_GetOrderImages";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nTrackId", nTrackId);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                 }
             }
