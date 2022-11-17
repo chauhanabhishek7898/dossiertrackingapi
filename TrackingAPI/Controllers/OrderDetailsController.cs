@@ -143,7 +143,7 @@ namespace TrackingAPI.Controllers
                 string CurrentDt = DateTime.Now.ToString("ddMMyyyyHHmm");
                 if (PhotoFile != null)
                 {
-                    var vPhotoFilePath = $"assets//OrderDetailsPhotos//PMC.OrderDetailsPhotos[0].nTrackId//{CurrentDt}//PhotoFile//{PhotoFile.FileName}";
+                    var vPhotoFilePath = $"assets//OrderDetailsPhotos//{PMC.OrderDetailsPhotos[0].nTrackId}//{CurrentDt}//PhotoFile//{PhotoFile.FileName}";
                     var response = await ImageUploader.SaveImage(PhotoFile, PMC.OrderDetailsPhotos[0].nTrackId, vPhotoFilePath);
                     PMC.OrderDetailsPhotos[0].vPhotoFilePath = vPhotoFilePath;
                 }
@@ -176,7 +176,7 @@ namespace TrackingAPI.Controllers
                 string CurrentDt = DateTime.Now.ToString("ddMMyyyyHHmm");
                 if (PhotoFile != null)
                 {
-                    var vPhotoFilePath = $"assets//OrderDetailsPhotos//PMC.OrderDetailsPhotos[0].nTrackId//{CurrentDt}//PhotoFile//{PhotoFile.FileName}";
+                    var vPhotoFilePath = $"assets//OrderDetailsPhotos//{PMC.OrderDetailsPhotos[0].nTrackId}//{CurrentDt}//PhotoFile//{PhotoFile.FileName}";
                     var response = await ImageUploader.SaveImage(PhotoFile, PMC.OrderDetailsPhotos[0].nTrackId, vPhotoFilePath);
                     PMC.OrderDetailsPhotos[0].vPhotoFilePath = vPhotoFilePath;
                 }
