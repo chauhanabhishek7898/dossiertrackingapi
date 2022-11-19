@@ -650,6 +650,37 @@ namespace TrackingAPI.Controllers
             catch (Exception ex) { throw ex; }
         }
 
+        [HttpPut]
+        [Route("OrdersPaymentReceivedByDriver")]
+        public JsonResult OrdersPaymentReceivedByDriver(OrderDetails CM)
+        {
+            try
+            {
+                string query = "DM_sp_OrdersPaymentReceivedByDriver";
+
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+
+                        //Send Email and Sms
+                        string MailSubject = MessageTemplate.SubOrderPaymentSuccess;
+                        string EmailText = MessageTemplate.OrderPaymentSuccessEmail(table.Rows[0]["vOrderId"].ToString(), table.Rows[0]["nAmount"].ToString());
+                        string SMSText = MessageTemplate.OrderPaymentSuccessSMS(table.Rows[0]["vOrderId"].ToString(), table.Rows[0]["nAmount"].ToString());
+                        MailSender.SendEmailText(MailSubject, EmailText, table.Rows[0]["CEmail"].ToString(), table.Rows[0]["vEmailIdOrg"].ToString());
+                        SmsSender.SendSmsText(SMSText, table.Rows[0]["MobileNos"].ToString());
+                    }
+                }
+                return new JsonResult("Payment Processed Successfully !!");
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         // RazorPay Methods End
 
     }
