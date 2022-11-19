@@ -76,6 +76,17 @@ namespace TrackingAPI.Models
         { return $"{vEstablishmentName} - Corporate Registration has been successfully approved by DCPL APP Administrator. Please use mobile APP to access the application."; }
         public static string ActivationOfEstablishmentMail(string vEstablishmentName)
         { return $"<strong>{vEstablishmentName}</strong> - Corporate Registration has been successfully approved by DCPL APP Administrator. Please use mobile APP to access the application."; }
+
+        //Order Payment Success
+        public static string SubOrderPaymentSuccess => "DCPL - Payment Processed Successfully";
+        public static string OrderPaymentSuccessEmail(string TransactionId, string AmountPaid)
+        {
+            return $"Dear DCPL Customer, your payment: <strong>Rs. {AmountPaid}</strong>  is successfully processed, with reference Id: <strong>{TransactionId}</strong>.";
+        }
+        public static string OrderPaymentSuccessSMS(string TransactionId, string AmountPaid)
+        {
+            return $"Your payment: Rs. {AmountPaid}  is successfully processed, with reference Id: {TransactionId}.";
+        }
     }
 }
 
