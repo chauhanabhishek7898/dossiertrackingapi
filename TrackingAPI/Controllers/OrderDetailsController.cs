@@ -245,7 +245,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("PickOrderByDriver")]
-        public async Task<JsonResult> PickOrderByDriver(OrderDetails CM)
+        public async Task<JsonResult> PickOrderByDriver(OrderPickUp CM)
         {
             try
             {
@@ -261,7 +261,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
-                await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
+                await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(table),CM.latitude,CM.longitude);
                 return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
@@ -536,5 +536,15 @@ namespace TrackingAPI.Controllers
     public class OrderDetailsPhotosClass
     {
         public List<OrderDetailsPhotos> OrderDetailsPhotos { get; set; }
+    }
+    public class OrderPickUp
+    { 
+        public int nTrackId { get; set; }
+        public int nLoggedInUserId { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get;set; }
+
+
+
     }
 }
