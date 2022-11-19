@@ -15,6 +15,7 @@
         public double nTotalWaitingPrice { get; set; }
         public double nDiscountAny { get; set; }
         public double nGrandTotal { get; set; }
+        public string vOrderId { get; set; }
         public bool btActive { get; set; }
         public bool btPaid { get; set; }
         public string vRemarks { get; set; }

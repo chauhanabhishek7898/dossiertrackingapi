@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TrackingAPI.Utilities;
 using TrackingAPI.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Razorpay.Api;
 
 namespace TrackingAPI.Controllers
 {
@@ -531,10 +532,131 @@ namespace TrackingAPI.Controllers
             return new JsonResult(table);
         }
 
+        decimal GetOrderFinalAmount(int nTrackId)
+        {
+            try
+            {
+                string query = "DM_sp_GetOrderFinalAmount";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.Parameters.AddWithValue("nTrackId", nTrackId);
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                    }
+                }
+                var OrderAmount = Convert.ToDecimal(table.Rows[0]["nGrandTotal"]); return OrderAmount;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        string CreateRazorPayOrderId(double OrderAmount)
+        {
+            RazorpayClient client = new RazorpayClient("rzp_test_dCJynUA3J6jM1d", "LpzdNika3CUmoy3lxy4yazLM");
+            //RazorpayClient client = new RazorpayClient("rzp_live_kvPoPHM5OoecBq", "dBAdleY0Hu1y4rMRuEqEz8pG");
+            Order order = new Order();
+            Dictionary<string, object> options = new Dictionary<string, object>();
+            options.Add("amount", OrderAmount * 100); options.Add("currency", "INR"); order = client.Order.Create(options);
+            var orderId = order.Attributes["id"];
+            return orderId;
+        }
+
+        // RazorPay Methods Start
+        [HttpPut]
+        [Route("OrdersPayment")]
+        public JsonResult OrdersPayment(OrderDetailsPhotosClass ED)
+        {
+            try
+            {
+                string query = "DM_sp_OrdersPayment";
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+                var orderId = CreateRazorPayOrderId(ED.OrderDetails[0].nGrandTotal);
+                ED.OrderDetails[0].vOrderId = orderId;
+                var JsonInput = JsonConvert.SerializeObject(ED);
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.CommandType = CommandType.StoredProcedure;
+
+                        myCommand.Parameters.AddWithValue("nTrackId", ED.OrderDetails[0].nTrackId);
+                        myCommand.Parameters.AddWithValue("vOrderId", orderId);
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                    }
+                }
+                var result = new { orderId = orderId, table = table, amount = ED.OrderDetails[0].nGrandTotal, nTrackId = ED.OrderDetails[0].nTrackId };
+                return new JsonResult(result);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        //[HttpPut]
+        //[Route("BuyCredits_PaymentSuccess")]
+        //public JsonResult BuyCredits_PaymentSuccess(OrderDetails CM)
+        //{
+        //    try
+        //    {
+        //        string query = "DM_sp_BuyCredits_PaymentSuccess";
+        //        DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+        //        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //        {
+        //            myCon.Open();
+        //            using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //            {
+        //                myCommand.CommandType = CommandType.StoredProcedure;
+        //                myCommand.Parameters.AddWithValue("nBuyCreditsId", CM.nBuyCreditsId);
+        //                myCommand.Parameters.AddWithValue("vPaymentReferenceId", CM.vPaymentReferenceId);
+        //                myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+
+        //                //Send Email and Sms
+        //                string MailSubject = MessageTemplate.SubCreditPointsSuccess;
+        //                string EmailText = MessageTemplate.CreditPointsSuccessEmail(table.Rows[0]["nCredits"].ToString(), table.Rows[0]["vBuyCreditsId"].ToString(), table.Rows[0]["nAmountPaid"].ToString());
+        //                string SMSText = MessageTemplate.CreditPointsSuccessSMS(table.Rows[0]["nCredits"].ToString(), table.Rows[0]["vBuyCreditsId"].ToString(), table.Rows[0]["nAmountPaid"].ToString());
+        //                UserMaster userMaster = UserMasterController.GetMobileNoAndEmailIdByUserId(_configuration, Convert.ToInt16(table.Rows[0]["nPatientUserId"].ToString()));
+        //                if (userMaster.vEmailId != null && userMaster.vEmailId.Trim() != "") { MailSender.SendEmailText(MailSubject, EmailText, userMaster.vEmailId); }
+        //                if (userMaster.vMobileNo != null && userMaster.vMobileNo != "") { SmsSender.SendSmsText(SMSText, userMaster.vMobileNo); }
+        //            }
+        //        }
+        //        return new JsonResult("Record Updated Successfully !!");
+        //    }
+        //    catch (Exception ex) { throw ex; }
+        //}
+
+        //[HttpPut]
+        //[Route("BuyCredits_PaymentFailure")]
+        //public JsonResult BuyCredits_PaymentFailure(OrderDetails CM)
+        //{
+        //    try
+        //    {
+        //        string query = "DM_sp_BuyCredits_PaymentFailure";
+
+        //        DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+        //        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //        {
+        //            myCon.Open();
+        //            using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //            {
+        //                myCommand.CommandType = CommandType.StoredProcedure;
+        //                myCommand.Parameters.AddWithValue("nBuyCreditsId", CM.nBuyCreditsId);
+        //                myCommand.Parameters.AddWithValue("vPaymentReferenceId", CM.vPaymentReferenceId);
+        //                retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+        //            }
+        //        }
+        //        return new JsonResult("Record Updated Successfully !!");
+        //    }
+        //    catch (Exception ex) { throw ex; }
+        //}
+
+        // RazorPay Methods End
+
     }
 
     public class OrderDetailsPhotosClass
     {
+        public List<OrderDetails> OrderDetails { get; set; }
         public List<OrderDetailsPhotos> OrderDetailsPhotos { get; set; }
     }
 }
