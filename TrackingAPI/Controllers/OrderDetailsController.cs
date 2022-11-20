@@ -597,7 +597,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("OrderDetail_PaymentSuccess")]
-        public JsonResult OrderDetail_PaymentSuccess(OrderDetails CM)
+        public async Task<JsonResult> OrderDetail_PaymentSuccess(OrderDetails CM)
         {
             try
             {
@@ -621,6 +621,7 @@ namespace TrackingAPI.Controllers
                         SmsSender.SendSmsText(SMSText, table.Rows[0]["MobileNos"].ToString());
                     }
                 }
+                await HubContext.Clients.All.SendAsync("PaymentSuccessUpdateByDriver", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult("Payment Processed Successfully !!");
             }
             catch (Exception ex) { throw ex; }
@@ -653,7 +654,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("OrdersPaymentReceivedByDriver")]
-        public JsonResult OrdersPaymentReceivedByDriver(OrderDetails CM)
+        public async Task<JsonResult> OrdersPaymentReceivedByDriver(OrderDetails CM)
         {
             try
             {
@@ -677,6 +678,7 @@ namespace TrackingAPI.Controllers
                         SmsSender.SendSmsText(SMSText, table.Rows[0]["MobileNos"].ToString());
                     }
                 }
+                await HubContext.Clients.All.SendAsync("PaymentSuccessUpdateByDriver", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult("Payment Processed Successfully !!");
             }
             catch (Exception ex) { throw ex; }
