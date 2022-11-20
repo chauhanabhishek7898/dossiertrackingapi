@@ -262,7 +262,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
-                await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(table),CM.latitude,CM.longitude);
+                await HubContext.Clients.All.SendAsync("BookingAccepted", CM.nLoggedInUserId, JsonConvert.SerializeObject(CM), JsonConvert.SerializeObject(table));
                 return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }

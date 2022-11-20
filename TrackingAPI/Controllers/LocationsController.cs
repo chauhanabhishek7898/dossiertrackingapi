@@ -184,7 +184,7 @@ namespace TrackingAPI.Controllers
                         myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
                         {
                             myCommand.CommandType = CommandType.StoredProcedure;
-                            myCommand.Parameters.AddWithValue("nDriverUserId", 25);
+                            myCommand.Parameters.AddWithValue("nDriverUserId", userId);
                             myCommand.Parameters.AddWithValue("vDiriverCurrentLat", lat.ToString());
                             myCommand.Parameters.AddWithValue("vDiriverCurrentLong", longt.ToString());
                             myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
