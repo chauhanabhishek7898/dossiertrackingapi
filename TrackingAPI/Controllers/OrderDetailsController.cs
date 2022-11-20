@@ -359,7 +359,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("UpdateOrder_DestinationReachedEndTimeByDriver")]
-        public JsonResult UpdateOrder_DestinationReachedEndTimeByDriver(OrderDetails CM)
+        public async Task<JsonResult> UpdateOrder_DestinationReachedEndTimeByDriver(OrderDetails CM)
         {
             try
             {
@@ -375,6 +375,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
+                await HubContext.Clients.All.SendAsync("BookingEnd", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }

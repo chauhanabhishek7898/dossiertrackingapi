@@ -28,7 +28,7 @@ namespace TrackingAPI.Utilities
                 SmtpClient smt = new SmtpClient(); smt.Host = "secure.emailsrvr.com";
                 System.Net.NetworkCredential ntcd = new NetworkCredential(); smt.UseDefaultCredentials = true;
                 ntcd.UserName = "admin@dossierexpress.com"; ntcd.Password = "admin120@Doss2022";
-                smt.Credentials = ntcd; smt.EnableSsl = false; smt.Port = 587; smt.Send(msg);
+                smt.Credentials = ntcd; smt.EnableSsl = true; smt.Port = 587; smt.Send(msg);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -46,7 +46,7 @@ namespace TrackingAPI.Utilities
                 SmtpClient smt = new SmtpClient(); smt.Host = "secure.emailsrvr.com";
                 System.Net.NetworkCredential ntcd = new NetworkCredential(); smt.UseDefaultCredentials = true;
                 ntcd.UserName = "admin@dossierexpress.com"; ntcd.Password = "admin120@Doss2022";
-                smt.Credentials = ntcd; smt.EnableSsl = false; smt.Port = 587; smt.Send(msg);
+                smt.Credentials = ntcd; smt.EnableSsl = true; smt.Port = 587; smt.Send(msg);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -65,7 +65,7 @@ namespace TrackingAPI.Utilities
                 SmtpClient smt = new SmtpClient(); smt.Host = "secure.emailsrvr.com";
                 System.Net.NetworkCredential ntcd = new NetworkCredential(); smt.UseDefaultCredentials = true;
                 ntcd.UserName = "admin@dossierexpress.com"; ntcd.Password = "admin120@Doss2022";
-                smt.Credentials = ntcd; smt.EnableSsl = false; smt.Port = 587; smt.Send(msg);
+                smt.Credentials = ntcd; smt.EnableSsl = true; smt.Port = 587; smt.Send(msg);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -109,7 +109,7 @@ namespace TrackingAPI.Utilities
                 SmtpClient smt = new SmtpClient(); smt.Host = "secure.emailsrvr.com";
                 System.Net.NetworkCredential ntcd = new NetworkCredential(); smt.UseDefaultCredentials = true;
                 ntcd.UserName = "admin@dossierexpress.com"; ntcd.Password = "admin120@Doss2022";
-                smt.Credentials = ntcd; smt.EnableSsl = false; smt.Port = 587; smt.Send(msg);
+                smt.Credentials = ntcd; smt.EnableSsl = true; smt.Port = 587; smt.Send(msg);
             }
             catch (Exception ex) { throw ex; }
         }
