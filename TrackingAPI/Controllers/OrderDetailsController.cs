@@ -621,8 +621,8 @@ namespace TrackingAPI.Controllers
                         SmsSender.SendSmsText(SMSText, table.Rows[0]["MobileNos"].ToString());
                     }
                 }
-                await HubContext.Clients.All.SendAsync("PaymentSuccessUpdateByDriver", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
-                return new JsonResult("Payment Processed Successfully !!");
+                await HubContext.Clients.All.SendAsync("PaymentSuccessUpdateByCustomer", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
+                return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -679,7 +679,7 @@ namespace TrackingAPI.Controllers
                     }
                 }
                 await HubContext.Clients.All.SendAsync("PaymentSuccessUpdateByDriver", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
-                return new JsonResult("Payment Processed Successfully !!");
+                return new JsonResult(table);
             }
             catch (Exception ex) { throw ex; }
         }
