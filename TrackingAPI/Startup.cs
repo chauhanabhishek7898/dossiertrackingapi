@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrackingAPI.Service;
 using TrackingAPI.Hubs;
+using Microsoft.AspNetCore.Http;
 
 namespace TrackingAPI
 {
@@ -69,7 +70,15 @@ namespace TrackingAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx => {
+                    ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+                    ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
+                      "Origin, X-Requested-With, Content-Type, Accept");
+                },
 
+            });
             app.UseRouting();
             //JWT Token
             app.UseAuthentication();
