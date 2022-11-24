@@ -687,7 +687,7 @@ namespace TrackingAPI.Controllers
         // RazorPay Methods End
 
         [HttpGet]
-        [Route("GetOrderDetailsByTrackId/{nUserId}")]
+        [Route("GetOrderDetailsByTrackId/{nTrackId}")]
         public JsonResult GetOrderDetailsByTrackId(int nTrackId)
         {
             string query = "DM_sp_GetOrderDetailsByTrackId";
