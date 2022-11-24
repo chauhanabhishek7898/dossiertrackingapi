@@ -153,6 +153,24 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetDriverByUserId/{nDriverUserId}")]
+        public JsonResult GetDriverByUserId(int nDriverUserId)
+        {
+            string query = "DM_sp_GetDriverByUserId";
+            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nDriverUserId", nDriverUserId);
+                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
         [Route("DriverMaster_SelectAll/{vGeneric}")]
         public JsonResult DriverMaster_SelectAll(string vGeneric)
         {
