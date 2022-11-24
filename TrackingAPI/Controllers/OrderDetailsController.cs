@@ -686,6 +686,27 @@ namespace TrackingAPI.Controllers
 
         // RazorPay Methods End
 
+        [HttpGet]
+        [Route("GetOrderDetailsByTrackId/{nUserId}")]
+        public JsonResult GetOrderDetailsByTrackId(int nTrackId)
+        {
+            string query = "DM_sp_GetOrderDetailsByTrackId";
+            DataSet DS = new DataSet(); DataTable TAB1 = new DataTable(); DataTable TAB2 = new DataTable(); TAB1.TableName = "TAB1"; TAB2.TableName = "TAB2";
+            DS.Tables.Add(TAB1); DS.Tables.Add(TAB2);
+            string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("nTrackId", nTrackId);
+                    myReader = myCommand.ExecuteReader(); DS.Load(myReader, LoadOption.OverwriteChanges, TAB1, TAB2); myReader.Close(); myCon.Close();
+                }
+            }
+            return new JsonResult(DS);
+        }
+
     }
 
     public class OrderDetailsPhotosClass
