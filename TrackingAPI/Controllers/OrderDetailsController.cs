@@ -68,7 +68,7 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(OrderDetails CM)
+        public async Task<JsonResult> Post(OrderDetails CM)
         {
             try
             {
@@ -115,6 +115,7 @@ namespace TrackingAPI.Controllers
 
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage", PMC.ChatDetails[0].nUserId, JsonConvert.SerializeObject(PMC.ChatDetails));
                         //await HubContext.Clients.All.SendAsync("BroadcastMessage");
+                        await HubContext.Clients.All.SendAsync("OrderBook", CM.nLoggedInUserId, JsonConvert.SerializeObject(DS));
                         // Firebases
                         List<string> devicesId = new List<string>();
                         foreach (DataRow row in TAB2.Rows)
@@ -123,7 +124,7 @@ namespace TrackingAPI.Controllers
                         }
                         if (devicesId.Count > 0)
                         {
-                            _pushNotificationService.SendNotificationToDrivers(TAB1, devicesId);
+                           await _pushNotificationService.SendNotificationToDrivers(TAB1, devicesId);
                         }
 
                     }
@@ -221,7 +222,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("CancelOrderByCustomerOrAdmin")]
-        public JsonResult CancelOrderByCustomerOrAdmin(OrderDetails CM)
+        public async Task<JsonResult> CancelOrderByCustomerOrAdmin(OrderDetails CM)
         {
             try
             {
@@ -239,6 +240,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
+                await HubContext.Clients.All.SendAsync("CancelOrderByCustomerOrAdmin", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult("Record Cancelled Successfully !!");
             }
             catch (Exception ex) { throw ex; }
@@ -270,7 +272,7 @@ namespace TrackingAPI.Controllers
 
         [HttpPut]
         [Route("CancelOrderByDriver")]
-        public JsonResult CancelOrderByDriver(OrderDetails CM)
+        public async Task<JsonResult> CancelOrderByDriver(OrderDetails CM)
         {
             try
             {
@@ -287,6 +289,7 @@ namespace TrackingAPI.Controllers
                         myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
+                await HubContext.Clients.All.SendAsync("CancelOrderByDriver", CM.nLoggedInUserId, JsonConvert.SerializeObject(table));
                 return new JsonResult("Order Cancelled by Driver Successfully !!");
             }
             catch (Exception ex) { throw ex; }
