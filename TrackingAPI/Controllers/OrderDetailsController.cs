@@ -391,7 +391,8 @@ namespace TrackingAPI.Controllers
         {
             string query = "DM_sp_O91_GetOrderDetailsForCustomers";
             if (vGeneric == "null") { vGeneric = null; }
-            DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
+            DataSet DS = new DataSet(); DataTable TAB1 = new DataTable(); DataTable TAB2 = new DataTable(); TAB1.TableName = "TAB1"; TAB2.TableName = "TAB2";
+            DS.Tables.Add(TAB1); DS.Tables.Add(TAB2); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -400,10 +401,10 @@ namespace TrackingAPI.Controllers
                     myCommand.Parameters.AddWithValue("nCustomerUserId", nCustomerUserId);
                     myCommand.Parameters.AddWithValue("FromDt", FromDt); myCommand.Parameters.AddWithValue("ToDt", ToDt);
                     myCommand.Parameters.AddWithValue("vGeneric", vGeneric);
-                    myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
+                    myReader = myCommand.ExecuteReader(); DS.Load(myReader, LoadOption.OverwriteChanges, TAB1, TAB2); myReader.Close(); myCon.Close();
                 }
             }
-            return new JsonResult(table);
+            return new JsonResult(DS);
         }
 
         [HttpGet]
