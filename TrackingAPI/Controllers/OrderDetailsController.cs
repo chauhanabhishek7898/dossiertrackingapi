@@ -226,7 +226,7 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_O3_CancelOrderByCustomerOrAdmin";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
                     myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -236,7 +236,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
                         myCommand.Parameters.AddWithValue("vRemarks", CM.vRemarks);
                         myCommand.Parameters.AddWithValue("vCancellationReason", CM.vCancellationReason);
-                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
                 return new JsonResult("Record Cancelled Successfully !!");
@@ -275,7 +275,7 @@ namespace TrackingAPI.Controllers
             try
             {
                 string query = "DM_sp_O5_CancelOrderByDriver";
-                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); int retValue = 0;
+                DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
                     myCon.Open(); using (SqlCommand myCommand = new SqlCommand(query, myCon))
@@ -284,7 +284,7 @@ namespace TrackingAPI.Controllers
                         myCommand.Parameters.AddWithValue("nTrackId", CM.nTrackId);
                         myCommand.Parameters.AddWithValue("nLoggedInUserId", CM.nLoggedInUserId);
                         myCommand.Parameters.AddWithValue("vCancellationReason", CM.vCancellationReason);
-                        retValue = myCommand.ExecuteNonQuery(); myCon.Close();
+                        myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                     }
                 }
                 return new JsonResult("Order Cancelled by Driver Successfully !!");
