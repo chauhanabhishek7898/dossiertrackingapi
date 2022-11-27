@@ -209,8 +209,8 @@ namespace TrackingAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetDriverOnDutyStatus/{nDriverUserId}/{GetOndutyStatus}")]
-        public JsonResult GetDriverOnDutyStatus(int nDriverUserId, bool GetOndutyStatus)
+        [Route("GetDriverOnDutyStatus/{nDriverUserId}")]
+        public JsonResult GetDriverOnDutyStatus(int nDriverUserId)
         {
             string query = "DM_sp_GetDriverOnDutyStatus";
             DataTable table = new DataTable(); string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon"); SqlDataReader myReader;
@@ -220,7 +220,6 @@ namespace TrackingAPI.Controllers
                 {
                     myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("nDriverUserId", nDriverUserId);
-                    myCommand.Parameters.AddWithValue("GetOndutyStatus", GetOndutyStatus);
                     myReader = myCommand.ExecuteReader(); table.Load(myReader); myReader.Close(); myCon.Close();
                 }
             }
@@ -285,6 +284,7 @@ namespace TrackingAPI.Controllers
                     {
                         myCommand.CommandType = CommandType.StoredProcedure;
                         myCommand.Parameters.AddWithValue("nDriverUserId", CM.nUserId);
+                        myCommand.Parameters.AddWithValue("GetOndutyStatus", CM.btOnDuty);
                         retValue = myCommand.ExecuteNonQuery(); myCon.Close();
                     }
                 }
